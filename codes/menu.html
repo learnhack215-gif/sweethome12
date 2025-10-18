@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SweetHome Delights - Cake Menu</title>
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<style>
+    body { font-family: 'Times New Roman', Times, serif; }
+    @keyframes rgbLight {
+        0% { box-shadow: 0 0 10px #ff0000; }
+        33% { box-shadow: 0 0 10px #00ff00; }
+        66% { box-shadow: 0 0 10px #0000ff; }
+        100% { box-shadow: 0 0 10px #ff0000; }
+    }
+    .rgb-border { animation: rgbLight 3s infinite; }
+    .cake-container:hover { transform: scale(1.05); transition: transform 0.3s; }
+</style>
+</head>
+<body class="bg-pink-50">
+
+<!-- RGB Lighting -->
+<div class="fixed top-0 left-0 w-4 h-full rgb-border z-0"></div>
+<div class="fixed top-0 right-0 w-4 h-full rgb-border z-0"></div>
+
+<!-- Navigation -->
+<nav class="bg-pink-600 text-white shadow-lg sticky top-0 z-10">
+<div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-2">
+        <i data-feather="home" class="text-pink-200"></i>
+        <a href="index.html" class="text-2xl font-bold">SweetHome Delights</a>
+    </div>
+    <div class="hidden md:flex space-x-6">
+        <a href="index.html" class="hover:text-pink-200 font-medium">Home</a>
+        <a href="#" class="hover:text-pink-200 font-medium text-pink-200 underline">Menu</a>
+        <a href="cart.html" class="hover:text-pink-200 font-medium flex items-center">
+            <i data-feather="shopping-cart" class="mr-1"></i>Cart
+            <span id="cart-count" class="text-sm bg-white text-pink-600 rounded-full px-2 ml-1">0</span>
+        </a>
+    </div>
+    <div class="flex items-center space-x-4">
+        <a href="cart.html" class="hover:text-pink-200 flex items-center md:hidden">
+            <i data-feather="shopping-cart"></i>
+            <span id="cart-count-mobile" class="text-sm bg-white text-pink-600 rounded-full px-2 ml-1">0</span>
+        </a>
+        <a href="#" class="hover:text-pink-200"><i data-feather="user"></i></a>
+        <button class="md:hidden focus:outline-none" id="menu-toggle">
+            <i data-feather="menu"></i>
+        </button>
+    </div>
+</div>
+<div class="md:hidden hidden bg-pink-700 px-4 py-2" id="mobile-menu">
+    <a href="index.html" class="block py-2 hover:text-pink-200">Home</a>
+    <a href="#" class="block py-2 hover:text-pink-200 text-pink-200 underline">Menu</a>
+    <a href="cart.html" class="block py-2 hover:text-pink-200 flex items-center">
+        <i data-feather="shopping-cart" class="mr-1"></i>Cart
+        <span id="cart-count-mobile-menu" class="text-sm bg-white text-pink-600 rounded-full px-2 ml-1">0</span>
+    </a>
+    <a href="index.html#offers" class="block py-2 hover:text-pink-200">Offers</a>
+    <a href="index.html#contact" class="block py-2 hover:text-pink-200">Contact</a>
+</div>
+</nav>
+
+<!-- Menu Header -->
+<section class="py-12 bg-pink-700 text-white">
+<div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Delicious Cake Menu</h1>
+    <p class="text-xl max-w-2xl mx-auto">Explore our wide variety of handcrafted cakes, cupcakes, and pastries made with love and finest ingredients</p>
+</div>
+</section>
+
+<!-- Menu Filters -->
+<section class="py-8 bg-white sticky top-16 z-10 shadow-sm">
+<div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div>
+        <h3 class="text-lg font-semibold text-pink-700">Filter By:</h3>
+    </div>
+    <div class="flex flex-wrap gap-3">
+        <button class="menu-filter bg-pink-600 text-white px-4 py-2 rounded-full" data-filter="All">All</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Chocolate">Chocolate</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Vanilla">Vanilla</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Fruit">Fruit</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Cheese">Cheese</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Specialty">Specialty</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Cupcake">Cupcake</button>
+        <button class="menu-filter bg-white border border-pink-600 text-pink-600 px-4 py-2 rounded-full hover:bg-pink-100" data-filter="Pastry">Pastry</button>
+    </div>
+    <div class="w-full md:w-auto">
+        <div class="relative">
+            <input type="text" placeholder="Search cakes..." id="search-box" class="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500">
+            <i data-feather="search" class="absolute left-3 top-2.5 text-gray-400"></i>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Cake Menu -->
+<section class="py-12 bg-pink-50">
+<div class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="cake-grid">
+
+<!-- Chocolate Truffle Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" alt="Chocolate Truffle Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Chocolate Truffle Cake</h3>
+        <p class="text-gray-600">₹899 | 1 Kg</p>
+        <p class="text-gray-600">Rich chocolate layers with truffle cream</p>
+        <button onclick="addToCart('menu-cake1', 'Chocolate Truffle Cake', 899, 'Rich chocolate layers with truffle cream', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Red Velvet Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=500" alt="Red Velvet Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Red Velvet Cake</h3>
+        <p class="text-gray-600">₹950 | 1 Kg</p>
+        <p class="text-gray-600">Classic red velvet with cream cheese frosting</p>
+        <button onclick="addToCart('menu-cake2', 'Red Velvet Cake', 950, 'Classic red velvet with cream cheese frosting', 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Black Forest Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500" alt="Black Forest Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Black Forest Cake</h3>
+        <p class="text-gray-600">₹850 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate sponge with cherries & cream</p>
+        <button onclick="addToCart('menu-cake3', 'Black Forest Cake', 850, 'Chocolate sponge with cherries & cream', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Strawberry Delight -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500" alt="Strawberry Delight" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Strawberry Delight</h3>
+        <p class="text-gray-600">₹750 | 1 Kg</p>
+        <p class="text-gray-600">Fresh strawberries with vanilla cream</p>
+        <button onclick="addToCart('menu-cake4', 'Strawberry Delight', 750, 'Fresh strawberries with vanilla cream', 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Butterscotch Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTjGTdk8aCiBYwxU4MMDgCETiNa83XW-Hofrj7OCTyt3pWGOb_U3dBZGIhtiNBJZED1uJ3rZ_ra2XPIkMXeZ2Xgrxys8EF6VgE6jS2JM7CeBT3tlRgmb3D3Sg" alt="Butterscotch Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Butterscotch Cake</h3>
+        <p class="text-gray-600">₹700 | 1 Kg</p>
+        <p class="text-gray-600">Vanilla sponge with butterscotch chips</p>
+        <button onclick="addToCart('menu-cake5', 'Butterscotch Cake', 700, 'Vanilla sponge with butterscotch chips', 'https://images.unsplash.com/photo-1557925923-33b27c4e63c7?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Pineapple Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500" alt="Pineapple Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Pineapple Cake</h3>
+        <p class="text-gray-600">₹680 | 1 Kg</p>
+        <p class="text-gray-600">Tropical pineapple with whipped cream</p>
+        <button onclick="addToCart('menu-cake6', 'Pineapple Cake', 680, 'Tropical pineapple with whipped cream', 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Vanilla Dream Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500" alt="Vanilla Dream Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Vanilla Dream Cake</h3>
+        <p class="text-gray-600">₹650 | 1 Kg</p>
+        <p class="text-gray-600">Classic vanilla with buttercream frosting</p>
+        <button onclick="addToCart('menu-cake7', 'Vanilla Dream Cake', 650, 'Classic vanilla with buttercream frosting', 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Blueberry Cheesecake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cheese">
+    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500" alt="Blueberry Cheesecake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Blueberry Cheesecake</h3>
+        <p class="text-gray-600">₹1,100 | 1 Kg</p>
+        <p class="text-gray-600">Creamy cheesecake with blueberry topping</p>
+        <button onclick="addToCart('menu-cake8', 'Blueberry Cheesecake', 1100, 'Creamy cheesecake with blueberry topping', 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Chocolate Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500" alt="Chocolate Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Chocolate Cupcakes</h3>
+        <p class="text-gray-600">₹450 | 6 pcs</p>
+        <p class="text-gray-600">Moist chocolate cupcakes with frosting</p>
+        <button onclick="addToCart('menu-cake9', 'Chocolate Cupcakes', 450, 'Moist chocolate cupcakes with frosting', 'https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Vanilla Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500" alt="Vanilla Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Vanilla Cupcakes</h3>
+        <p class="text-gray-600">₹400 | 6 pcs</p>
+        <p class="text-gray-600">Light and fluffy vanilla cupcakes</p>
+        <button onclick="addToCart('menu-cake10', 'Vanilla Cupcakes', 400, 'Light and fluffy vanilla cupcakes', 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Chocolate Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500" alt="Chocolate Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Chocolate Pastry</h3>
+        <p class="text-gray-600">₹150 | per piece</p>
+        <p class="text-gray-600">Rich chocolate pastry with cream</p>
+        <button onclick="addToCart('menu-cake11', 'Chocolate Pastry', 150, 'Rich chocolate pastry with cream', 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Fruit Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=500" alt="Fruit Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Fruit Pastry</h3>
+        <p class="text-gray-600">₹140 | per piece</p>
+        <p class="text-gray-600">Fresh fruit topped pastry</p>
+        <button onclick="addToCart('menu-cake12', 'Fruit Pastry', 140, 'Fresh fruit topped pastry', 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Tiramisu -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500" alt="Tiramisu" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Tiramisu</h3>
+        <p class="text-gray-600">₹1,200 | 1 Kg</p>
+        <p class="text-gray-600">Classic Italian coffee-flavored dessert</p>
+        <button onclick="addToCart('menu-cake13', 'Tiramisu', 1200, 'Classic Italian coffee-flavored dessert', 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Mango Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=500" alt="Mango Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Mango Cake</h3>
+        <p class="text-gray-600">₹780 | 1 Kg</p>
+        <p class="text-gray-600">Tropical mango cream cake</p>
+        <button onclick="addToCart('menu-cake14', 'Mango Cake', 780, 'Tropical mango cream cake', 'https://images.unsplash.com/photo-1602351447937-745cb720612f?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Oreo Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500" alt="Oreo Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Oreo Cake</h3>
+        <p class="text-gray-600">₹880 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate cake with Oreo crumbs</p>
+        <button onclick="addToCart('menu-cake15', 'Oreo Cake', 880, 'Chocolate cake with Oreo crumbs', 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Rainbow Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500" alt="Rainbow Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Rainbow Cake</h3>
+        <p class="text-gray-600">₹1,050 | 1 Kg</p>
+        <p class="text-gray-600">Multi-layered colorful cake</p>
+        <button onclick="addToCart('menu-cake16', 'Rainbow Cake', 1050, 'Multi-layered colorful cake', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Caramel Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://images.unsplash.com/photo-1607478900766-efe13248b125?w=500" alt="Caramel Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Caramel Cake</h3>
+        <p class="text-gray-600">₹820 | 1 Kg</p>
+        <p class="text-gray-600">Vanilla cake with caramel drizzle</p>
+        <button onclick="addToCart('menu-cake17', 'Caramel Cake', 820, 'Vanilla cake with caramel drizzle', 'https://images.unsplash.com/photo-1607478900766-efe13248b125?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- White Forest Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500" alt="White Forest Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">White Forest Cake</h3>
+        <p class="text-gray-600">₹870 | 1 Kg</p>
+        <p class="text-gray-600">White chocolate with cherries</p>
+        <button onclick="addToCart('menu-cake18', 'White Forest Cake', 870, 'White chocolate with cherries', 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Ferrero Rocher Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500" alt="Ferrero Rocher Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Ferrero Rocher Cake</h3>
+        <p class="text-gray-600">₹1,250 | 1 Kg</p>
+        <p class="text-gray-600">Hazelnut chocolate cake with Ferrero</p>
+        <button onclick="addToCart('menu-cake19', 'Ferrero Rocher Cake', 1250, 'Hazelnut chocolate cake with Ferrero', 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Kitkat Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRsZHEtBeqjjxGpdSyl_XzeKe2i3pZSZXVE51qLlsi9bhD1PFYD0Uze0CfExB7O4IuTewOr6ZwNuieVtiC7_vE_xUb_SpV1aSQXmn1obXdxebjQzkn0MRT3kg" alt="Kitkat Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Kitkat Cake</h3>
+        <p class="text-gray-600">₹920 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate cake decorated with Kitkat</p>
+        <button onclick="addToCart('menu-cake20', 'Kitkat Cake', 920, 'Chocolate cake decorated with Kitkat', 'https://images.unsplash.com/photo-1591382696684-38c427c7547f?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Strawberry Cheesecake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cheese">
+    <img src="https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=500" alt="Strawberry Cheesecake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Strawberry Cheesecake</h3>
+        <p class="text-gray-600">₹1,150 | 1 Kg</p>
+        <p class="text-gray-600">Creamy cheesecake with fresh strawberries</p>
+        <button onclick="addToCart('menu-cake21', 'Strawberry Cheesecake', 1150, 'Creamy cheesecake with fresh strawberries', 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Rasmalai Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500" alt="Rasmalai Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Rasmalai Cake</h3>
+        <p class="text-gray-600">₹980 | 1 Kg</p>
+        <p class="text-gray-600">Fusion of traditional Rasmalai and cake</p>
+        <button onclick="addToCart('menu-cake22', 'Rasmalai Cake', 980, 'Fusion of traditional Rasmalai and cake', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Death By Chocolate -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" alt="Death By Chocolate" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Death By Chocolate</h3>
+        <p class="text-gray-600">₹1,350 | 1 Kg</p>
+        <p class="text-gray-600">Ultimate chocolate lover's dream cake</p>
+        <button onclick="addToCart('menu-cake23', 'Death By Chocolate', 1350, 'Ultimate chocolate lover\'s dream cake', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Lemon Tart -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=500" alt="Lemon Tart" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Lemon Tart</h3>
+        <p class="text-gray-600">₹180 | per piece</p>
+        <p class="text-gray-600">Tangy lemon custard in crispy tart</p>
+        <button onclick="addToCart('menu-cake24', 'Lemon Tart', 180, 'Tangy lemon custard in crispy tart', 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Coffee Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=500" alt="Coffee Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Coffee Cake</h3>
+        <p class="text-gray-600">₹750 | 1 Kg</p>
+        <p class="text-gray-600">Coffee flavored sponge with mocha cream</p>
+        <button onclick="addToCart('menu-cake25', 'Coffee Cake', 750, 'Coffee flavored sponge with mocha cream', 'https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Kiwi Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500" alt="Kiwi Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Kiwi Cake</h3>
+        <p class="text-gray-600">₹800 | 1 Kg</p>
+        <p class="text-gray-600">Fresh kiwi fruit cream cake</p>
+        <button onclick="addToCart('menu-cake26', 'Kiwi Cake', 800, 'Fresh kiwi fruit cream cake', 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Walnut Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSUXT1wbV0STzjt1cUqfVgY2VjOocOyxbKmneH79QAK4BrY7eQsFyJ1emDRsJgxbflld6u6EsQyoGSgn4qPm2o-B5Xv-8qBx6D5VSHsyxZe" alt="Walnut Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Walnut Cake</h3>
+        <p class="text-gray-600">₹790 | 1 Kg</p>
+        <p class="text-gray-600">Vanilla cake loaded with walnuts</p>
+        <button onclick="addToCart('menu-cake27', 'Walnut Cake', 790, 'Vanilla cake loaded with walnuts', 'https://images.unsplash.com/photo-1562440499-64c9a4a4e7f4?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Almond Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcTvz6dmgVq6ZIpo6PdALkN70HkuNaiXTReN1AygNi6S1tWo0MWfXHY9T5BfoQ4K0Od-8ZOhGrAyENKb0Xjxf1WZGAmTtcEy3Z7wLrJaVySJXOscOO4w4A9c" alt="Almond Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Almond Cake</h3>
+        <p class="text-gray-600">₹850 | 1 Kg</p>
+        <p class="text-gray-600">Rich almond flavored cake</p>
+        <button onclick="addToCart('menu-cake28', 'Almond Cake', 850, 'Rich almond flavored cake', 'https://images.unsplash.com/photo-1588195538326-c5b1e5b80d5f?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Coconut Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Vanilla">
+    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500" alt="Coconut Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Coconut Cake</h3>
+        <p class="text-gray-600">₹720 | 1 Kg</p>
+        <p class="text-gray-600">Soft vanilla cake with coconut flakes</p>
+        <button onclick="addToCart('menu-cake29', 'Coconut Cake', 720, 'Soft vanilla cake with coconut flakes', 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Hazelnut Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=500" alt="Hazelnut Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Hazelnut Cake</h3>
+        <p class="text-gray-600">₹950 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate hazelnut delight</p>
+        <button onclick="addToCart('menu-cake30', 'Hazelnut Cake', 950, 'Chocolate hazelnut delight', 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Mint Chocolate Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" alt="Mint Chocolate Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Mint Chocolate Cake</h3>
+        <p class="text-gray-600">₹900 | 1 Kg</p>
+        <p class="text-gray-600">Refreshing mint with chocolate layers</p>
+        <button onclick="addToCart('menu-cake31', 'Mint Chocolate Cake', 900, 'Refreshing mint with chocolate layers', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Orange Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500" alt="Orange Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Orange Cake</h3>
+        <p class="text-gray-600">₹700 | 1 Kg</p>
+        <p class="text-gray-600">Tangy orange flavored sponge cake</p>
+        <button onclick="addToCart('menu-cake32', 'Orange Cake', 700, 'Tangy orange flavored sponge cake', 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Banana Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Fruit">
+    <img src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=500" alt="Banana Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Banana Cake</h3>
+        <p class="text-gray-600">₹680 | 1 Kg</p>
+        <p class="text-gray-600">Moist banana walnut cake</p>
+        <button onclick="addToCart('menu-cake33', 'Banana Cake', 680, 'Moist banana walnut cake', 'https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Nutella Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Chocolate">
+    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500" alt="Nutella Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Nutella Cake</h3>
+        <p class="text-gray-600">₹1,050 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate cake with Nutella filling</p>
+        <button onclick="addToCart('menu-cake34', 'Nutella Cake', 1050, 'Chocolate cake with Nutella filling', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Marble Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" alt="Marble Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Marble Cake</h3>
+        <p class="text-gray-600">₹750 | 1 Kg</p>
+        <p class="text-gray-600">Chocolate and vanilla swirl cake</p>
+        <button onclick="addToCart('menu-cake35', 'Marble Cake', 750, 'Chocolate and vanilla swirl cake', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Gulab Jamun Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500" alt="Gulab Jamun Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Gulab Jamun Cake</h3>
+        <p class="text-gray-600">₹950 | 1 Kg</p>
+        <p class="text-gray-600">Indian fusion Gulab Jamun cake</p>
+        <button onclick="addToCart('menu-cake36', 'Gulab Jamun Cake', 950, 'Indian fusion Gulab Jamun cake', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Red Velvet Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500" alt="Red Velvet Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Red Velvet Cupcakes</h3>
+        <p class="text-gray-600">₹480 | 6 pcs</p>
+        <p class="text-gray-600">Red velvet cupcakes with cream cheese</p>
+        <button onclick="addToCart('menu-cake37', 'Red Velvet Cupcakes', 480, 'Red velvet cupcakes with cream cheese', 'https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Strawberry Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500" alt="Strawberry Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Strawberry Cupcakes</h3>
+        <p class="text-gray-600">₹460 | 6 pcs</p>
+        <p class="text-gray-600">Fresh strawberry flavored cupcakes</p>
+        <button onclick="addToCart('menu-cake38', 'Strawberry Cupcakes', 460, 'Fresh strawberry flavored cupcakes', 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Blueberry Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500" alt="Blueberry Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Blueberry Cupcakes</h3>
+        <p class="text-gray-600">₹470 | 6 pcs</p>
+        <p class="text-gray-600">Blueberry topped vanilla cupcakes</p>
+        <button onclick="addToCart('menu-cake39', 'Blueberry Cupcakes', 470, 'Blueberry topped vanilla cupcakes', 'https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Caramel Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500" alt="Caramel Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Caramel Cupcakes</h3>
+        <p class="text-gray-600">₹440 | 6 pcs</p>
+        <p class="text-gray-600">Caramel drizzled cupcakes</p>
+        <button onclick="addToCart('menu-cake40', 'Caramel Cupcakes', 440, 'Caramel drizzled cupcakes', 'https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Oreo Cupcakes -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Cupcake">
+    <img src="https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=500" alt="Oreo Cupcakes" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Oreo Cupcakes</h3>
+        <p class="text-gray-600">₹490 | 6 pcs</p>
+        <p class="text-gray-600">Oreo cookies and cream cupcakes</p>
+        <button onclick="addToCart('menu-cake41', 'Oreo Cupcakes', 490, 'Oreo cookies and cream cupcakes', 'https://images.unsplash.com/photo-1603532648955-039310d9ed75?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Blackforest Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500" alt="Blackforest Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Blackforest Pastry</h3>
+        <p class="text-gray-600">₹160 | per piece</p>
+        <p class="text-gray-600">Classic blackforest pastry slice</p>
+        <button onclick="addToCart('menu-cake42', 'Blackforest Pastry', 160, 'Classic blackforest pastry slice', 'https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Butterscotch Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRYtsuIsdkZEBYpw-hQrpPRqFcCLsGDHmMrLIaNW6yClDuu67ChPrvw6cPMX9v58VvU84uHhas3st5C05jb2LT25luQG_tuwMk9Ztnzt7OG" alt="Butterscotch Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Butterscotch Pastry</h3>
+        <p class="text-gray-600">₹140 | per piece</p>
+        <p class="text-gray-600">Butterscotch pastry with crunchy chips</p>
+        <button onclick="addToCart('menu-cake43', 'Butterscotch Pastry', 140, 'Butterscotch pastry with crunchy chips', 'https://images.unsplash.com/photo-1562440499-64c9a4a4e7f4?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Strawberry Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500" alt="Strawberry Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Strawberry Pastry</h3>
+        <p class="text-gray-600">₹155 | per piece</p>
+        <p class="text-gray-600">Strawberry cream pastry</p>
+        <button onclick="addToCart('menu-cake44', 'Strawberry Pastry', 155, 'Strawberry cream pastry', 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Pineapple Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500" alt="Pineapple Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Pineapple Pastry</h3>
+        <p class="text-gray-600">₹135 | per piece</p>
+        <p class="text-gray-600">Tropical pineapple pastry</p>
+        <button onclick="addToCart('menu-cake45', 'Pineapple Pastry', 135, 'Tropical pineapple pastry', 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Choco Truffle Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" alt="Choco Truffle Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Choco Truffle Pastry</h3>
+        <p class="text-gray-600">₹165 | per piece</p>
+        <p class="text-gray-600">Rich chocolate truffle pastry</p>
+        <button onclick="addToCart('menu-cake46', 'Choco Truffle Pastry', 165, 'Rich chocolate truffle pastry', 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Vanilla Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500" alt="Vanilla Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Vanilla Pastry</h3>
+        <p class="text-gray-600">₹130 | per piece</p>
+        <p class="text-gray-600">Classic vanilla cream pastry</p>
+        <button onclick="addToCart('menu-cake47', 'Vanilla Pastry', 130, 'Classic vanilla cream pastry', 'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Mango Pastry -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Pastry">
+    <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=500" alt="Mango Pastry" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Mango Pastry</h3>
+        <p class="text-gray-600">₹145 | per piece</p>
+        <p class="text-gray-600">Mango cream pastry slice</p>
+        <button onclick="addToCart('menu-cake48', 'Mango Pastry', 145, 'Mango cream pastry slice', 'https://images.unsplash.com/photo-1602351447937-745cb720612f?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Mocha Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500" alt="Mocha Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Mocha Cake</h3>
+        <p class="text-gray-600">₹880 | 1 Kg</p>
+        <p class="text-gray-600">Coffee and chocolate fusion cake</p>
+        <button onclick="addToCart('menu-cake49', 'Mocha Cake', 880, 'Coffee and chocolate fusion cake', 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Pistachio Cake -->
+<div class="cake-container bg-white rounded-lg shadow-lg overflow-hidden" data-category="Specialty">
+    <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500" alt="Pistachio Cake" class="w-full h-64 object-cover">
+    <div class="p-4 text-center">
+        <h3 class="text-xl font-bold text-pink-700">Pistachio Cake</h3>
+        <p class="text-gray-600">₹990 | 1 Kg</p>
+        <p class="text-gray-600">Rich pistachio flavored cake</p>
+        <button onclick="addToCart('menu-cake50', 'Pistachio Cake', 990, 'Rich pistachio flavored cake', 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500')" class="mt-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition">Add to Cart</button>
+    </div>
+</div>
+
+</div>
+</section>
+
+<script>
+// Mobile menu toggle
+document.getElementById('menu-toggle').addEventListener('click', function() {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+});
+
+// Cake filtering
+const filterButtons = document.querySelectorAll('.menu-filter');
+const cakes = document.querySelectorAll('.cake-container');
+
+filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        filterButtons.forEach(btn => {
+            btn.classList.remove('bg-pink-600','text-white');
+            btn.classList.add('bg-white','border','border-pink-600','text-pink-600');
+        });
+        this.classList.remove('bg-white','border','border-pink-600','text-pink-600');
+        this.classList.add('bg-pink-600','text-white');
+
+        const filter = this.dataset.filter;
+        cakes.forEach(cake => {
+            if(filter === "All" || cake.dataset.category === filter){
+                cake.style.display = "block";
+            } else {
+                cake.style.display = "none";
+            }
+        });
+    });
+});
+
+// Search cakes
+document.getElementById('search-box').addEventListener('input', function() {
+    const searchText = this.value.toLowerCase();
+    cakes.forEach(cake => {
+        const cakeName = cake.querySelector('h3').textContent.toLowerCase();
+        if(cakeName.includes(searchText)){
+            cake.style.display = "block";
+        } else {
+            cake.style.display = "none";
+        }
+    });
+});
+
+// Add to Cart Function
+function addToCart(id, name, price, desc, img) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (existingItem) {
+        existingItem.qty++;
+    } else {
+        cart.push({ id, name, price, desc, img, qty: 1 });
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    
+    // Show success message
+    alert(`${name} added to cart!`);
+}
+
+// Update cart count badge
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+    document.getElementById('cart-count').textContent = totalItems;
+    document.getElementById('cart-count-mobile').textContent = totalItems;
+    document.getElementById('cart-count-mobile-menu').textContent = totalItems;
+}
+
+// Initialize
+updateCartCount();
+feather.replace();
+</script>
+
+</body>
+</html>
